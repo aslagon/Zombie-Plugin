@@ -1,0 +1,5 @@
+main: kr.mcv.aslagon.Zombie
+name: Zombie
+version: 0.0.1
+commands:
+  zb:
