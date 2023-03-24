@@ -11,6 +11,7 @@ public class Command implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, org.bukkit.command.@NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
             if (args[0].equals("reload")) {
+                //asd
                 Bukkit.getServer().shutdown();
             }
 
