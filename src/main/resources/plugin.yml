@@ -3,3 +3,4 @@ name: Zombie
 version: 0.0.1
 commands:
   zb:
+    description: zombie
