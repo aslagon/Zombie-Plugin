@@ -123,9 +123,12 @@ public class Event implements Listener {
         ArrayList<Player> recipients = new ArrayList<>();
 
         for (Player otherPlayer : Bukkit.getServer().getOnlinePlayers()) {
-            if (otherPlayer != sender && sender.getLocation().distance(otherPlayer.getLocation()) <= 50) {
-                recipients.add(otherPlayer);
-            } else if (otherPlayer != sender && sender.getLocation().distance(otherPlayer.getLocation()) > 50) recipients.remove(otherPlayer);
+            if (sender.getWorld() == otherPlayer.getWorld()) {
+                if (otherPlayer != sender && sender.getLocation().distance(otherPlayer.getLocation()) <= 50) {
+                    recipients.add(otherPlayer);
+                } else if (otherPlayer != sender && sender.getLocation().distance(otherPlayer.getLocation()) > 50)
+                    recipients.remove(otherPlayer);
+            }
         }
 
         if (!recipients.isEmpty()) {
