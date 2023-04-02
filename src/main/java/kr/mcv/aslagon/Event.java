@@ -34,9 +34,8 @@ public class Event implements Listener {
                 event.setCancelled(false);
             }
             else if (event.getEntityType().equals(EntityType.SHEEP) || event.getEntityType().equals(EntityType.COW) || event.getEntityType().equals(EntityType.PIG)) {
-                int[] Random = new int[]{1, 2, 3, 4, 5, 6, 8, 9, 10};
 
-                event.setCancelled(IntStream.of(Random).noneMatch(x -> x == SpawnRandom));
+                event.setCancelled(IntStream.range(1, 10).noneMatch(x -> x == SpawnRandom));
 
             }
             else if (!(SpawnRandom == 1)) {
