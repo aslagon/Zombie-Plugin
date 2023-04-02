@@ -1,6 +1,8 @@
 package kr.mcv.aslagon;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -11,12 +13,19 @@ import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.stream.IntStream;
+
+import static org.bukkit.Bukkit.getServer;
 
 
 public class Event implements Listener {
@@ -35,7 +44,7 @@ public class Event implements Listener {
             }
             else if (event.getEntityType().equals(EntityType.SHEEP) || event.getEntityType().equals(EntityType.COW) || event.getEntityType().equals(EntityType.PIG)) {
 
-                event.setCancelled(IntStream.range(1, 10).noneMatch(x -> x == SpawnRandom));
+                event.setCancelled(IntStream.range(1, 11).noneMatch(x -> x == SpawnRandom));
 
             }
             else if (!(SpawnRandom == 1)) {
@@ -99,5 +108,33 @@ public class Event implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
         event.setDeathMessage(ChatColor.RED + "Someone died.");
+    }
+//    @EventHandler
+//    public void onChat(PlayerChatEvent event) {
+//        event.setCancelled(true);
+//        getServer().broadcastMessage(ChatColor.RED + "Someone chatted.");
+//    }
+
+    @EventHandler
+    public void onPlayerChat(AsyncPlayerChatEvent event) {
+        Player sender = event.getPlayer();
+        String message = event.getMessage();
+
+        ArrayList<Player> recipients = new ArrayList<>();
+
+        for (Player otherPlayer : Bukkit.getServer().getOnlinePlayers()) {
+            if (otherPlayer != sender && sender.getLocation().distance(otherPlayer.getLocation()) <= 50) {
+                recipients.add(otherPlayer);
+            } else if (otherPlayer != sender && sender.getLocation().distance(otherPlayer.getLocation()) > 50) recipients.remove(otherPlayer);
+        }
+
+        if (!recipients.isEmpty()) {
+            recipients.add(sender);
+            event.getRecipients().clear();
+            event.getRecipients().addAll(recipients);
+        } else {
+            event.setCancelled(true);
+            Bukkit.broadcastMessage(ChatColor.RED + "Someone chatted.");
+        }
     }
 }
